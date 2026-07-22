@@ -8,6 +8,7 @@
 <meta property="og:title" content="draw-your-font">
 <meta property="og:description" content="Turn a photo of your handwriting into a real font. Free, open source, no uploads.">
 <meta property="og:image" content="https://danilo-znamerovszkij.github.io/draw-your-font/hero.png">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preload" href="DansHand.woff2" as="font" type="font/woff2" crossorigin>
 <style>
   /* The headline face is the product: a real font made from one photo of
@@ -67,6 +68,8 @@
   header .hand { font-size: 1.35rem; }
   header a { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
   header a:hover { color: var(--ink); }
+  header .links { display: flex; align-items: center; gap: 16px; }
+  header .links img { display: block; height: 20px; }
 
   .hero { padding: 72px 0 24px; text-align: center; }
   h1 {
@@ -170,7 +173,12 @@
 
   <header class="reveal d1">
     <span class="hand">Draw Your Font</span>
-    <a href="https://github.com/danilo-znamerovszkij/draw-your-font">GitHub &nearr;</a>
+    <div class="links">
+      <a href="https://github.com/danilo-znamerovszkij/draw-your-font" aria-label="Star on GitHub">
+        <img src="https://img.shields.io/github/stars/danilo-znamerovszkij/draw-your-font?style=social" alt="GitHub stars" height="20">
+      </a>
+      <a href="https://github.com/danilo-znamerovszkij/draw-your-font">GitHub &nearr;</a>
+    </div>
   </header>
 
   <main>
