@@ -10,7 +10,8 @@
   "files": [
     "src",
     "skills",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=18"
