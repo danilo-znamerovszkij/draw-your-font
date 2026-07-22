@@ -21,6 +21,4 @@ test/tmp/
 docs/
 .claude/settings.local.json
 /sample_font.png
-test/*.ttf
-test/*.jpeg
-test/*.HEIC
+
