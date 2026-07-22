@@ -1,0 +1,22 @@
+# deps
+node_modules/
+
+# generated working dirs (segmentation crops, built fonts, previews)
+work/
+work-*/
+test/tmp/
+
+# generated artifacts at repo root (font files & templates users produce)
+/*.ttf
+/*.woff
+/*.woff2
+/*.pdf
+/*.css
+
+# editor / OS noise
+.idea/
+.DS_Store
+
+# private notes / research
+docs/
+.claude/settings.local.json
