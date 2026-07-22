@@ -4,6 +4,10 @@
 
 Draw your alphabet on paper. Take a photo. Get your font.
 
+![A photo of a handwritten alphabet in a spiral notebook becoming an installable font](assets/hero.png)
+
+*This is a real one-shot result: dim light, spiral binding, page shadow — one photo in, installable font out.*
+
 ## Use it as a Claude Code skill (the fun way)
 
 ```bash

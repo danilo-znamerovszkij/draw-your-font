@@ -20,3 +20,4 @@ test/tmp/
 # private notes / research
 docs/
 .claude/settings.local.json
+/sample_font.png
