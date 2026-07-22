@@ -1,5 +1,5 @@
 'use strict';
-// Library entry point — same pipeline the CLI drives.
+// Library entry point - same pipeline the CLI drives.
 module.exports = {
   ...require('./capture'),
   ...require('./segment'),

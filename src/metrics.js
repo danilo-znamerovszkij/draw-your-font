@@ -2,7 +2,7 @@
 // The craft step: place each traced glyph into a shared 1000-UPM em space.
 // Every character has a vertical band (bottom..top in font units, baseline = 0);
 // the glyph's ink is scaled uniformly to fill its band. This shared coordinate
-// system — not per-glyph normalization — is what makes the result feel like a
+// system - not per-glyph normalization - is what makes the result feel like a
 // font instead of a ransom note.
 const svgpath = require('svgpath');
 const { fixWinding } = require('./winding');

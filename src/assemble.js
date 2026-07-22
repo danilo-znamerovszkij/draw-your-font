@@ -1,6 +1,6 @@
 'use strict';
 // Placed glyphs -> font binaries. We author the SVG-font XML ourselves so
-// glyph placement and metrics are exactly what metrics.js computed —
+// glyph placement and metrics are exactly what metrics.js computed -
 // no icon-font "normalize" scaling anywhere in the chain.
 const svg2ttf = require('svg2ttf');
 const ttf2woff = require('ttf2woff');

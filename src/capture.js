@@ -9,13 +9,13 @@ const MAX_SIDE = 4200;
  * @param {string|Buffer} file photo (jpg/png/heic-converted)
  * @param {{delta?: number, cap?: number}} opts
  *   delta: how much darker than local background a pixel must be to count as ink
- *   cap:   absolute grey ceiling for ink (after normalise) — kills printed grey guides
+ *   cap:   absolute grey ceiling for ink (after normalise) - kills printed grey guides
  * @returns {{ink: Uint8Array, width: number, height: number, gray: Buffer}} ink: 1 = ink
  */
 async function binarize(file, { delta = 40, cap = 165 } = {}) {
   const dims = await sharp(file, { limitInputPixels: 1e9 }).metadata();
   if ((dims.width || 0) < 16 || (dims.height || 0) < 16) {
-    throw new Error(`Image is too small to process (${dims.width}x${dims.height}) — need at least 16x16 px.`);
+    throw new Error(`Image is too small to process (${dims.width}x${dims.height}) - need at least 16x16 px.`);
   }
   const { data, info } = await sharp(file, { limitInputPixels: 1e9 })
     .rotate() // honour EXIF orientation

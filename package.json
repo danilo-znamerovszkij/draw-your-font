@@ -1,7 +1,7 @@
 {
   "name": "draw-your-font",
   "version": "0.1.0",
-  "description": "Turn a photo of your handwriting into a real font (TTF/WOFF/WOFF2) — free, open source, no uploads.",
+  "description": "Turn a photo of your handwriting into a real font (TTF/WOFF/WOFF2) - free, open source, no uploads.",
   "license": "MIT",
   "bin": {
     "draw-your-font": "src/cli.js"

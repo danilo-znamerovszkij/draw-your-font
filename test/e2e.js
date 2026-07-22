@@ -87,7 +87,7 @@ async function makeSamplePhoto(file) {
     assert.ok(fs.existsSync(path.join(WORK, f)), `${f} exists`);
   }
 
-  console.log('e2e OK — synthetic photo became a valid TTF with correct metrics.');
+  console.log('e2e OK - synthetic photo became a valid TTF with correct metrics.');
 })().catch((e) => {
   console.error(e);
   process.exit(1);

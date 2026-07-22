@@ -2,7 +2,7 @@
 // TrueType fills with the NONZERO winding rule: outer contours must wind
 // clockwise (in y-up font coordinates) and holes counter-clockwise.
 // potrace emits every contour in the same direction (it assumes even-odd),
-// which makes counters — the bowls of b, g, o, a — fill solid in real
+// which makes counters - the bowls of b, g, o, a - fill solid in real
 // renderers. We re-orient each subpath by its nesting depth.
 // Only M/L/C/Q/Z segments are handled: that is all potrace produces.
 const svgpath = require('svgpath');

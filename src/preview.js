@@ -1,6 +1,6 @@
 'use strict';
 // Render preview PNGs straight from the placed glyph vectors (no font
-// rasterizer needed) so Claude — or the user — can judge the result.
+// rasterizer needed) so Claude - or the user - can judge the result.
 const sharp = require('sharp');
 const { UPM } = require('./metrics');
 
@@ -77,7 +77,7 @@ async function renderPreview(manifest, file, { text, sizes = [64, 40, 28, 18] } 
 }
 
 /**
- * Glyph sheet: every glyph large, labeled, with baseline — for per-glyph QC.
+ * Glyph sheet: every glyph large, labeled, with baseline - for per-glyph QC.
  */
 async function renderGlyphSheet(manifest, file) {
   const glyphs = manifest.glyphs;

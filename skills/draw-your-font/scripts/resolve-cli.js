@@ -16,7 +16,7 @@ if (fs.existsSync(repoCli)) {
     console.log(`node ${repoCli}`);
     process.exit(0);
   } catch {
-    console.error(`Found ${path.dirname(path.dirname(repoCli))} but its dependencies are missing — run: npm install there`);
+    console.error(`Found ${path.dirname(path.dirname(repoCli))} but its dependencies are missing - run: npm install there`);
     process.exit(1);
   }
 }

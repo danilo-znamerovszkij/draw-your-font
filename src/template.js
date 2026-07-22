@@ -1,6 +1,6 @@
 'use strict';
 // Printable A4 template PDF. Everything prints in light grey so the adaptive
-// threshold in capture.js erases it — only the user's pen ink survives.
+// threshold in capture.js erases it - only the user's pen ink survives.
 // Cell order = charset order, so a filled template needs no recognition at all.
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
@@ -42,7 +42,7 @@ function generateTemplate(out, { charset = 'minimal' } = {}) {
 
   for (let page = 0; page * perPage < chars.length; page++) {
     if (page > 0) doc.addPage();
-    doc.fontSize(14).fillColor('#999').text(`draw-your-font — page ${page + 1}`, M, M, { lineBreak: false });
+    doc.fontSize(14).fillColor('#999').text(`draw-your-font - page ${page + 1}`, M, M, { lineBreak: false });
     doc.fontSize(8).fillColor('#aaa').text(
       'Use a dark pen (0.5 mm or thicker). Write each character large, inside its box, sitting on the solid line. ' +
       'Lowercase body between the dashed lines. Then photograph each page from above in good light.',

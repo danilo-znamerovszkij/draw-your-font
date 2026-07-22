@@ -65,7 +65,7 @@ function mergeParts(boxes) {
     // recompute each round: speck swarms (shadow noise) drag the median down
     // until they consolidate; a stale low median blocks legitimate dot merges
     const medH = medianHeight(boxes);
-    // find ALL eligible pairs, then merge only the closest one — a dot
+    // find ALL eligible pairs, then merge only the closest one - a dot
     // between two rows must join its nearest stem, not whichever pair
     // the scan happens to visit first
     let best = null;

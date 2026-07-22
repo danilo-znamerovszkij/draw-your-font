@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { parseArgs } = require('node:util');
 
-const USAGE = `draw-your-font — turn a photo of your handwriting into a real font
+const USAGE = `draw-your-font - turn a photo of your handwriting into a real font
 
 Usage:
   draw-your-font template [-o template.pdf] [--charset minimal|spanish]
@@ -114,11 +114,11 @@ async function build(dir, opt) {
     if (!char) continue;
     char = char.normalize('NFC');
     if ([...char].length > 1) {
-      console.warn(`  ! "${char}" (blob ${blob.id}) is a multi-character sequence — not supported yet, skipped`);
+      console.warn(`  ! "${char}" (blob ${blob.id}) is a multi-character sequence - not supported yet, skipped`);
       continue;
     }
     if (seen.has(char)) {
-      console.warn(`  ! duplicate "${char}" (blob ${blob.id}) — keeping the first one`);
+      console.warn(`  ! duplicate "${char}" (blob ${blob.id}) - keeping the first one`);
       continue;
     }
     seen.add(char);
@@ -126,7 +126,7 @@ async function build(dir, opt) {
     png = await adjustWeight(png, weight);
     const d = await trace(png, { smooth });
     if (!d) {
-      console.warn(`  ! blob ${blob.id} ("${char}") traced to nothing — skipped`);
+      console.warn(`  ! blob ${blob.id} ("${char}") traced to nothing - skipped`);
       continue;
     }
     const placed = placeGlyph(d, blob.cropSize, blobs.pad, char);
@@ -190,7 +190,7 @@ function resolveLabels(blobs, opt, CHARSETS) {
   const ids = blobs.blobs.map((b) => b.id);
   if (chars.length !== ids.length) {
     console.warn(
-      `  ! ${ids.length} blobs found but ${chars.length} characters given — mapping in order, extras ignored.\n` +
+      `  ! ${ids.length} blobs found but ${chars.length} characters given - mapping in order, extras ignored.\n` +
       `    If this is unexpected, inspect the contact sheet and use --labels for exact control.`
     );
   }
