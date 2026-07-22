@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>draw-your-font - turn a photo of your handwriting into a real font</title>
+<meta name="description" content="Draw your alphabet on paper. Take a photo. Get your font. Free, open source, runs locally. TTF, WOFF, WOFF2.">
+<meta property="og:title" content="draw-your-font">
+<meta property="og:description" content="Turn a photo of your handwriting into a real font. Free, open source, no uploads.">
+<meta property="og:image" content="https://danilo-znamerovszkij.github.io/draw-your-font/hero.png">
+<link rel="preload" href="DansHand.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  /* The headline face is the product: a real font made from one photo of
+     handwriting by this exact tool. Body stays system-ui (it ships optical
+     sizing and tracking tables; overriding it needs a reason, and we have
+     one only for display text). */
+  @font-face {
+    font-family: 'Dans Hand';
+    src: url('DansHand.woff2') format('woff2');
+    font-display: swap;
+  }
+
+  :root {
+    --paper: #faf7f1;
+    --ink: #1d1c1a;
+    --muted: #6f6a62;
+    --line: #e7e1d6;
+    --accent: #0a7cff; /* the Font Book "Install" blue from the hero shot */
+    --card: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font: 100%/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hand {
+    font-family: 'Dans Hand', cursive;
+    text-transform: uppercase;
+    font-weight: normal;
+    letter-spacing: 0.02em; /* handwriting caps breathe a little */
+  }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- staggered load reveal (opacity-only under reduced motion) ---- */
+  .reveal { opacity: 0; transform: translateY(10px); animation: rise 0.6s ease-out forwards; }
+  .d1 { animation-delay: 0.05s } .d2 { animation-delay: 0.15s }
+  .d3 { animation-delay: 0.25s } .d4 { animation-delay: 0.4s }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { transform: none; animation: fade 0.3s ease forwards; }
+    @keyframes fade { to { opacity: 1 } }
+    html { scroll-behavior: auto; }
+  }
+
+  header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 28px 0 0;
+  }
+  header .hand { font-size: 1.35rem; }
+  header a { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
+  header a:hover { color: var(--ink); }
+
+  .hero { padding: 72px 0 24px; text-align: center; }
+  h1 {
+    font-size: clamp(2.6rem, 8vw, 5.2rem);
+    line-height: 1.08;
+    max-width: 14ch;
+    margin: 0 auto;
+  }
+  .sub {
+    margin: 24px auto 0;
+    max-width: 44ch;
+    color: var(--muted);
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+  }
+  .sub strong { color: var(--ink); font-weight: 600; }
+
+  /* ---- copyable install command ---- */
+  .install {
+    margin: 36px auto 0;
+    display: inline-flex; align-items: center; gap: 14px;
+    background: var(--ink); color: #f5f2ea;
+    border-radius: 14px;
+    padding: 16px 18px 16px 22px;
+    font: 0.95rem/1 ui-monospace, "SF Mono", Menlo, monospace;
+    box-shadow: 0 14px 40px -18px rgba(29, 28, 26, 0.5);
+    max-width: 100%;
+  }
+  .install code { white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .install code::-webkit-scrollbar { display: none; }
+  .install code .dim { color: #8d887e; }
+  .copy {
+    all: unset; cursor: pointer;
+    font-family: 'Dans Hand', cursive; text-transform: uppercase;
+    font-size: 1rem; color: var(--paper);
+    background: var(--accent);
+    border-radius: 9px; padding: 8px 16px 6px;
+    transition: transform 100ms ease-out;
+    touch-action: manipulation;
+  }
+  .copy:active { transform: scale(0.96); } /* feedback on press, not release */
+  .copy:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+
+  .hero-img { padding: 56px 0 0; }
+  .hero-img img {
+    width: 100%; height: auto; display: block;
+    border-radius: 18px;
+    box-shadow: 0 30px 80px -30px rgba(29, 28, 26, 0.35);
+  }
+  .caption { color: var(--muted); font-size: 0.85rem; margin-top: 14px; text-align: center; }
+
+  section { padding: 88px 0 0; }
+  h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin-bottom: 40px; text-align: center; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
+  .step {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 26px 24px 24px;
+  }
+  .step .hand { font-size: 1.5rem; display: block; margin-bottom: 10px; }
+  .step p { color: var(--muted); font-size: 0.95rem; }
+  .step p b { color: var(--ink); font-weight: 600; }
+
+  .cli {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  .cli p { color: var(--muted); margin-bottom: 16px; }
+  .cli pre {
+    background: var(--ink); color: #f5f2ea;
+    border-radius: 12px; padding: 18px 20px;
+    font: 0.9rem/1.7 ui-monospace, "SF Mono", Menlo, monospace;
+    overflow-x: auto;
+  }
+  .cli pre .c { color: #8d887e; }
+
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; }
+  @media (max-width: 640px) { .facts { grid-template-columns: 1fr; } }
+  .fact .hand { font-size: 1.4rem; display: block; margin-bottom: 8px; }
+  .fact p { color: var(--muted); font-size: 0.92rem; max-width: 30ch; margin: 0 auto; }
+
+  footer {
+    margin-top: 96px;
+    border-top: 1px solid var(--line);
+    padding: 36px 0 48px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    flex-wrap: wrap; gap: 12px;
+    color: var(--muted); font-size: 0.9rem;
+  }
+  footer nav { display: flex; gap: 22px; }
+  footer a { color: var(--ink); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="reveal d1">
+    <span class="hand">Draw Your Font</span>
+    <a href="https://github.com/danilo-znamerovszkij/draw-your-font">GitHub &nearr;</a>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1 class="hand reveal d1">Your handwriting is a font now</h1>
+      <p class="sub reveal d2">Draw your alphabet on paper. Take a photo. Get a real
+        <strong>TTF / WOFF2</strong> font. Free, open source, runs on your machine.
+        Nothing is uploaded, no credits, and the font is one hundred percent yours.</p>
+      <div class="install reveal d3">
+        <code id="cmd">npx skills add danilo-znamerovszkij/draw-your-font</code>
+        <button class="copy" id="copyBtn" type="button" aria-label="Copy install command">Copy</button>
+      </div>
+      <p class="caption reveal d3">This headline is set in a font made by this tool, from the photo below.</p>
+    </div>
+
+    <div class="hero-img reveal d4">
+      <img src="hero.png" width="1200" height="675"
+           alt="A handwritten alphabet in a spiral notebook next to the resulting font installing in Font Book">
+      <p class="caption">A real one-shot result: dim light, spiral binding, page shadow. One photo in, installable font out.</p>
+    </div>
+
+    <section>
+      <h2 class="hand">How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="hand">Write</span>
+          <p>Grab a <b>dark pen</b> and write your alphabet on paper. Any paper.
+             A napkin counts. Letters just should not touch.</p>
+        </div>
+        <div class="step">
+          <span class="hand">Photograph</span>
+          <p>One phone photo from above. Shadows, angles and notebook
+             spirals are handled. <b>No scanner, no exact template.</b></p>
+        </div>
+        <div class="step">
+          <span class="hand">Say make my font</span>
+          <p>Drag the photo into <b>Claude Code</b> and say it. The letters are
+             found, labeled and built into a font, then quality-checked for you.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="hand">No AI needed either</h2>
+      <div class="cli">
+        <p>The skill sits on a plain npm CLI with zero system dependencies.
+           If you can tell it what you wrote, it does the whole job by itself:</p>
+        <pre><span class="c"># freeform photo, in the order you wrote:</span>
+npx draw-your-font make photo.jpg --chars "ABCabc" --name "My Hand"
+
+<span class="c"># or print a guided template first:</span>
+npx draw-your-font template -o template.pdf
+npx draw-your-font make page1.jpg page2.jpg --charset minimal</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="hand">The fine print</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="hand">Yours</span>
+          <p>The font belongs to you. Commercial use included. It is your handwriting.</p>
+        </div>
+        <div class="fact">
+          <span class="hand">Free</span>
+          <p>The usual tool for this costs eight dollars a month. Your terminal does it for free.</p>
+        </div>
+        <div class="fact">
+          <span class="hand">Local</span>
+          <p>Everything runs on your machine. Your handwriting never leaves it. MIT licensed.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>MIT. Draw something.</span>
+    <nav>
+      <a href="https://github.com/danilo-znamerovszkij/draw-your-font">GitHub</a>
+      <a href="https://www.npmjs.com/package/draw-your-font">npm</a>
+      <a href="https://github.com/danilo-znamerovszkij/draw-your-font#readme">Docs</a>
+    </nav>
+  </footer>
+
+</div>
+
+<script>
+  const btn = document.getElementById('copyBtn');
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(document.getElementById('cmd').textContent);
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1600);
+    } catch {
+      /* clipboard blocked: select the text instead */
+      const r = document.createRange();
+      r.selectNodeContents(document.getElementById('cmd'));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    }
+  });
+</script>
+</body>
+</html>
