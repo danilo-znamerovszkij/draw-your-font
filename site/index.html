@@ -130,6 +130,55 @@
   section { padding: 88px 0 0; }
   h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin-bottom: 40px; text-align: center; }
 
+  /* ---- live demo ---- */
+  .demo-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px;
+  }
+  #demo-drop {
+    border: 2px dashed var(--line);
+    border-radius: 12px;
+    padding: 44px 20px;
+    text-align: center;
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color 150ms ease, background 150ms ease;
+  }
+  #demo-drop.over, #demo-drop:hover { border-color: var(--accent); background: #f4f9ff; }
+  #demo-drop .hand { font-size: 1.3rem; display: block; margin-bottom: 6px; color: var(--ink); }
+  .demo-controls {
+    display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px;
+    margin-top: 18px; font-size: 0.85rem; color: var(--muted);
+  }
+  @media (max-width: 640px) { .demo-controls { grid-template-columns: 1fr; } }
+  .demo-controls label { display: flex; flex-direction: column; gap: 6px; }
+  .demo-controls input[type="text"] {
+    font: 0.9rem ui-monospace, "SF Mono", Menlo, monospace;
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 8px 10px; background: var(--paper); color: var(--ink);
+  }
+  .demo-controls input[type="range"] { accent-color: var(--accent); }
+  #demo-status { margin-top: 14px; font-size: 0.9rem; color: var(--muted); min-height: 1.4em; }
+  #demo-result[hidden] { display: none; }
+  #demo-preview {
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    line-height: 1.5;
+    padding: 18px 4px 8px;
+    outline: none;
+  }
+  #demo-download {
+    display: inline-block;
+    font-family: 'Dans Hand', cursive; text-transform: uppercase;
+    color: var(--paper); background: var(--accent);
+    text-decoration: none;
+    border-radius: 9px; padding: 10px 20px 8px;
+    transition: transform 100ms ease-out;
+  }
+  #demo-download:active { transform: scale(0.96); }
+  .demo-note { font-size: 0.8rem; color: var(--muted); margin-top: 14px; }
+
   .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
   .step {
@@ -207,6 +256,36 @@
       <p class="caption">A real one-shot result: dim light, spiral binding, page shadow. One photo in, installable font out.</p>
     </div>
 
+    <section id="demo">
+      <h2 class="hand">Try it right here</h2>
+      <div class="demo-card">
+        <div id="demo-drop" role="button" tabindex="0" aria-label="Choose a photo of your handwriting">
+          <span class="hand">Drop a photo of your handwriting</span>
+          or tap to choose one. Write your letters with a dark pen, not touching.
+          <input type="file" id="demo-file" accept="image/*" hidden>
+        </div>
+        <div class="demo-controls">
+          <label>what you wrote, in reading order
+            <input type="text" id="demo-chars" value="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" spellcheck="false">
+          </label>
+          <label>font name
+            <input type="text" id="demo-name" value="My Hand" maxlength="40">
+          </label>
+          <label>ink sensitivity
+            <input type="range" id="demo-delta" min="20" max="80" value="40">
+          </label>
+        </div>
+        <p id="demo-status"></p>
+        <div id="demo-result" hidden>
+          <div id="demo-preview" contenteditable="true" spellcheck="false">The quick brown fox jumps over the lazy dog</div>
+          <a id="demo-download" href="#">Download TTF</a>
+        </div>
+        <p class="demo-note">Runs entirely in this tab: your photo never leaves your device.
+        The full tool adds Claude's eyes (no need to type what you wrote), a print
+        template, WOFF2 and refinement.</p>
+      </div>
+    </section>
+
     <section>
       <h2 class="hand">How it works</h2>
       <div class="steps">
@@ -273,6 +352,26 @@ npx draw-your-font make page1.jpg page2.jpg --charset minimal</pre>
 </div>
 
 <script>
+  // demo engine (~potrace wasm + font assembly) loads lazily when the demo
+  // section comes near the viewport, or immediately for the self-test hook
+  (function () {
+    let loaded = false;
+    const load = () => {
+      if (loaded) return;
+      loaded = true;
+      const s = document.createElement('script');
+      s.src = 'demo.js';
+      document.body.appendChild(s);
+    };
+    if (location.hash === '#selftest') load();
+    else if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((es) => {
+        if (es.some((e) => e.isIntersecting)) { load(); io.disconnect(); }
+      }, { rootMargin: '600px' });
+      io.observe(document.getElementById('demo'));
+    } else load();
+  })();
+
   const btn = document.getElementById('copyBtn');
   btn.addEventListener('click', async () => {
     try {
