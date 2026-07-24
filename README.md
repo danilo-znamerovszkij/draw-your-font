@@ -14,9 +14,9 @@ Draw your alphabet on paper. Take a photo. Get your font.
 npx skills add danilo-znamerovszkij/draw-your-font
 ```
 
-Then in Claude Code, just talk:
+Then in Claude Code, invoke the skill and hand it your photo:
 
-> *"here's a photo of my handwriting - make my font"* (drag the photo into the terminal)
+> */draw-your-font* *"here's a photo of my handwriting - make my font"* (drag the photo into the terminal)
 
 Claude finds your letters in the photo, labels them with vision, builds the
 font, shows you a preview, and critiques its own work. Iterate by talking:
