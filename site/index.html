@@ -119,6 +119,15 @@
   .copy:active { transform: scale(0.96); } /* feedback on press, not release */
   .copy:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
 
+  .hero-video { padding: 56px 0 0; }
+  .hero-video video {
+    display: block;
+    width: min(400px, 100%);
+    margin: 0 auto;
+    border-radius: 18px;
+    box-shadow: 0 30px 80px -30px rgba(29, 28, 26, 0.35);
+  }
+
   .hero-img { padding: 56px 0 0; }
   .hero-img img {
     width: 100%; height: auto; display: block;
@@ -250,6 +259,13 @@
       <p class="caption reveal d3">This headline is set in a font made by this tool, from the photo below.</p>
     </div>
 
+    <div class="hero-video reveal d4">
+      <video src="draw_your_font.mp4" width="1080" height="1440"
+             autoplay muted loop playsinline
+             aria-label="Screen recording: a handwriting photo becoming an installed font"></video>
+      <p class="caption">The whole flow, real time: photo in, installed font out.</p>
+    </div>
+
     <div class="hero-img reveal d4">
       <img src="hero.png" width="1200" height="675"
            alt="A handwritten alphabet in a spiral notebook next to the resulting font installing in Font Book">
@@ -371,6 +387,12 @@ npx draw-your-font make page1.jpg page2.jpg --charset minimal</pre>
       io.observe(document.getElementById('demo'));
     } else load();
   })();
+
+  // reduced motion: no autoplaying video, show controls instead
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const v = document.querySelector('.hero-video video');
+    v.removeAttribute('autoplay'); v.pause(); v.controls = true;
+  }
 
   const btn = document.getElementById('copyBtn');
   btn.addEventListener('click', async () => {
