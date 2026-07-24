@@ -119,10 +119,11 @@
   .copy:active { transform: scale(0.96); } /* feedback on press, not release */
   .copy:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
 
-  .hero-video { padding: 56px 0 0; }
-  .hero-video video {
+  .how-video { padding: 48px 0 0; }
+  .how-video video {
     display: block;
     width: min(400px, 100%);
+    height: auto;
     margin: 0 auto;
     border-radius: 18px;
     box-shadow: 0 30px 80px -30px rgba(29, 28, 26, 0.35);
@@ -259,13 +260,6 @@
       <p class="caption reveal d3">This headline is set in a font made by this tool, from the photo below.</p>
     </div>
 
-    <div class="hero-video reveal d4">
-      <video src="draw_your_font.mp4" width="1080" height="1440"
-             autoplay muted loop playsinline
-             aria-label="Screen recording: a handwriting photo becoming an installed font"></video>
-      <p class="caption">The whole flow, real time: photo in, installed font out.</p>
-    </div>
-
     <div class="hero-img reveal d4">
       <img src="hero.png" width="1200" height="675"
            alt="A handwritten alphabet in a spiral notebook next to the resulting font installing in Font Book">
@@ -320,6 +314,12 @@
           <p>Drag the photo into <b>Claude Code</b> and say it. Claude finds
              and labels the letters, builds the font, and checks the result for you.</p>
         </div>
+      </div>
+      <div class="how-video">
+        <video data-src="draw_your_font.mp4" width="1080" height="1440"
+               muted loop playsinline preload="none"
+               aria-label="Screen recording: a handwriting photo becoming an installed font"></video>
+        <p class="caption">The whole flow, real time: photo in, installed font out.</p>
       </div>
     </section>
 
@@ -388,11 +388,22 @@ npx draw-your-font make page1.jpg page2.jpg --charset minimal</pre>
     } else load();
   })();
 
-  // reduced motion: no autoplaying video, show controls instead
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const v = document.querySelector('.hero-video video');
-    v.removeAttribute('autoplay'); v.pause(); v.controls = true;
-  }
+  // flow video: fetch nothing until it nears the viewport, then autoplay
+  // (controls instead of autoplay under reduced motion)
+  (function () {
+    const v = document.querySelector('.how-video video');
+    const start = () => {
+      v.src = v.dataset.src;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) v.controls = true;
+      else { v.muted = true; v.play().catch(() => { v.controls = true; }); }
+    };
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((es) => {
+        if (es.some((e) => e.isIntersecting)) { start(); io.disconnect(); }
+      }, { rootMargin: '400px' });
+      io.observe(v);
+    } else start();
+  })();
 
   const btn = document.getElementById('copyBtn');
   btn.addEventListener('click', async () => {
