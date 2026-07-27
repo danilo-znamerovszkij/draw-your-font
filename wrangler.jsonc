@@ -1,0 +1,17 @@
+{
+  "name": "draw-your-font",
+  "compatibility_date": "2026-07-27",
+  "assets": {
+    "directory": "./site"
+  },
+  "routes": [
+    {
+      "pattern": "drawyourfont.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.drawyourfont.com",
+      "custom_domain": true
+    }
+  ]
+}
