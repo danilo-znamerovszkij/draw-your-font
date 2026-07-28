@@ -62,7 +62,7 @@ Then write `work/labels.json` mapping blob id → character, e.g.
 
 - Template page: order is the charset order printed on the template - verify
   against the sheet instead of trusting it blindly. minimal order: A–Z, a–z,
-  0–9, then `.,;:!?'"-()@#&+/$`; spanish appends `ÑñÁÉÍÓÚáéíóúü¿¡`.
+  0–9, then `.,;:!?'"-()@#&+/$`; Spanish appends `ÑñÁÉÍÓÚáéíóúü¿¡`.
 - Freeform: identify each letter from the contact sheet. Uppercase vs
   lowercase for shape-twins (S/s, O/o, C/c, X/x…) is decided by relative size
   and position - compare against neighbors you're sure of.
