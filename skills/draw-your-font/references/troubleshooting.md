@@ -18,7 +18,7 @@ any labels.json written earlier and relabel from the fresh contact sheet
 ## Symptoms → fixes
 
 **Hundreds of tiny blobs** - noisy paper texture or aggressive delta. Re-run
-segment with `--delta 55`. If the photo is low light, ask for a brighter shot.
+segment with `--delta 55`. If the photo is in low light, ask for a brighter shot.
 
 **A huge blob spanning the page** - a shadow edge or the page border got
 thresholded. Crop the photo to just the paper (or re-shoot from directly
