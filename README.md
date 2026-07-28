@@ -49,7 +49,7 @@ npx draw-your-font make page1.jpg page2.jpg --charset minimal --name "My Hand"
 ```
 
 Pure npm, zero system dependencies: no FontForge, no ImageMagick, no potrace
-binary. Works on macOS / Linux / Windows wherever Node ≥ 18 runs.
+binary. Works on macOS / Linux / Windows, wherever Node ≥ 18 runs.
 
 ### CLI reference
 
